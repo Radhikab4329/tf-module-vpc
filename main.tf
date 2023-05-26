@@ -32,10 +32,15 @@ resource "aws_internet_gateway" "gw" {
   )
 }
 
-resource "aws_route" "nat_gw_route" {
-  count                  = var.nat_gw ? 1 : 0
-  route_table_id         = aws_route_table.route_table.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = var.nat_gw_id
+resource "aws_eip" "ngw-eip" {
+  vpc      = true
 }
 
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.ngw-eip.id
+  subnet_id     = lookup(lookup(module.public_subnets, "public", null), "subnet_ids", null)[0]
+
+  tags       = merge (
+    local.common_tags,
+    { Name = "${var.env}-ngw" }
+  )
