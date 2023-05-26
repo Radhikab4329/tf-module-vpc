@@ -20,7 +20,7 @@
 
 module "public_subnets" {
   source = "./subnets"
-  default_vpc_id            = var.default_vpc_id
+  default_vpc_id              = var.default_vpc_id
     env                       = var.env
     availability_zone         = var.availability_zone
 
@@ -35,3 +35,4 @@ module "public_subnets" {
     tags                      = local.common_tags
     gateway_id                = aws_internet_gateway.gw.id
 }
+
