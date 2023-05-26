@@ -32,4 +32,10 @@ resource "aws_internet_gateway" "gw" {
   )
 }
 
+resource "aws_route" "nat_gw_route" {
+  count                  = var.nat_gw ? 1 : 0
+  route_table_id         = aws_route_table.route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = var.nat_gw_id
+}
 
